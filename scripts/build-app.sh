@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Builds a release binary and wraps it into build/ShelfD.app.
+# Builds a universal (Apple Silicon + Intel) release binary and wraps it into build/ShelfD.app.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-swift build -c release
-BIN="$(swift build -c release --show-bin-path)/ShelfD"
+ARCHS=(--arch arm64 --arch x86_64)
+swift build -c release "${ARCHS[@]}"
+BIN="$(swift build -c release "${ARCHS[@]}" --show-bin-path)/ShelfD"
 
 APP="build/ShelfD.app"
 rm -rf "$APP"

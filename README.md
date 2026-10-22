@@ -4,6 +4,20 @@ A small macOS menu bar app for parking files. Start dragging files out of Finder
 
 Shelves only keep references to your files. Nothing gets copied or moved until you drag the files out somewhere.
 
+## Download
+
+No coding tools needed. ShelfD runs on macOS 14 or later, on both Apple Silicon and Intel Macs.
+
+1. Download `ShelfD-x.y.z.zip` from the [latest release](https://github.com/Aadi077/ShelfD/releases/latest).
+2. Unzip it and drag **ShelfD.app** into your **Applications** folder.
+3. Open it. ShelfD isn't signed with a paid Apple developer certificate, so the first time, macOS says it can't verify the app. To allow it:
+   - Open **System Settings → Privacy & Security**.
+   - Scroll down to the message about ShelfD and click **Open Anyway**, then confirm.
+
+   You only have to do this once.
+
+ShelfD lives in the menu bar and has no Dock icon. Open it again any time to get to Settings.
+
 ## Usage
 
 - **Shake to open a shelf.** While dragging files, shake the mouse quickly side to side and drop the files on the box that appears.
@@ -34,13 +48,15 @@ You need macOS 14 or later and Xcode (or the Swift toolchain).
 open build/ShelfD.app
 ```
 
-To install it, or to update an installed copy after a rebuild:
+To install a build, or to update an installed copy after a rebuild:
 
 ```bash
 ./scripts/build-app.sh && pkill -x ShelfD; ditto build/ShelfD.app /Applications/ShelfD.app && open /Applications/ShelfD.app
 ```
 
 Run the tests with `swift test`.
+
+To make a release zip, bump `CFBundleShortVersionString` in `Resources/Info.plist` and run `./scripts/package-release.sh`. The zip goes to `build/`.
 
 ## Status
 
