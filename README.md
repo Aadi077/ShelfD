@@ -17,6 +17,8 @@ Shelves are saved automatically and come back when ShelfD relaunches. If a file 
 
 ## Settings
 
+ShelfD has no Dock icon or main window. To open Settings, choose **Settings…** from the menu bar icon, or open ShelfD again from Finder, Spotlight or Launchpad.
+
 - **Open at login**
 - **Shake sensitivity.** Gentle, Normal or Firm.
 - **Excluded apps.** Shaking while dragging from these apps won't open a shelf.
@@ -32,8 +34,14 @@ You need macOS 14 or later and Xcode (or the Swift toolchain).
 open build/ShelfD.app
 ```
 
+To install it, or to update an installed copy after a rebuild:
+
+```bash
+./scripts/build-app.sh && pkill -x ShelfD; ditto build/ShelfD.app /Applications/ShelfD.app && open /Applications/ShelfD.app
+```
+
 Run the tests with `swift test`.
 
 ## Status
 
-Early prototype. File-drag detection works. The full shake, drop and drag-out flow still needs testing by hand.
+Early prototype. Checked so far: file-drag detection, the shake sensitivity presets (unit tests), and restoring saved shelves, including files moved since. The full shake, drop and drag-out flow still needs testing by hand.
