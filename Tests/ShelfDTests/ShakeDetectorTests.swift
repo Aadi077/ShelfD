@@ -60,3 +60,36 @@ final class ShakeDetectorTests: XCTestCase {
         XCTAssertFalse(detector.add(x: 520, y: 500, time: 10.05))
     }
 }
+
+final class ShakeSensitivityTests: XCTestCase {
+    /// Feeds `legs` horizontal swings of `width` points, each lasting `legSeconds`.
+    private func fires(_ sensitivity: ShakeSensitivity, width: Double, legs: Int, legSeconds: Double) -> Bool {
+        let detector = ShakeDetector(config: sensitivity.config)
+        let steps = 10
+        var t = 0.0
+        for leg in 0..<legs {
+            let (a, b) = leg % 2 == 0 ? (0.0, width) : (width, 0.0)
+            for s in 0..<steps {
+                t += legSeconds / Double(steps)
+                if detector.add(x: a + (b - a) * Double(s) / Double(steps), y: 0, time: t) { return true }
+            }
+        }
+        return false
+    }
+
+    func testGentleCatchesSmallShakeThatNormalIgnores() {
+        XCTAssertTrue(fires(.gentle, width: 28, legs: 6, legSeconds: 0.1))
+        XCTAssertFalse(fires(.normal, width: 28, legs: 6, legSeconds: 0.1))
+    }
+
+    func testFirmIgnoresShortShakeThatNormalCatches() {
+        XCTAssertTrue(fires(.normal, width: 120, legs: 5, legSeconds: 0.08))
+        XCTAssertFalse(fires(.firm, width: 120, legs: 5, legSeconds: 0.08))
+    }
+
+    func testEveryPresetCatchesVigorousShake() {
+        for sensitivity in ShakeSensitivity.allCases {
+            XCTAssertTrue(fires(sensitivity, width: 150, legs: 10, legSeconds: 0.07), sensitivity.rawValue)
+        }
+    }
+}

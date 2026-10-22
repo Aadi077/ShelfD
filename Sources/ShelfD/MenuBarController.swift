@@ -5,10 +5,12 @@ final class MenuBarController: NSObject {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let onNewShelf: () -> Void
     private let onCloseAll: () -> Void
+    private let onSettings: () -> Void
 
-    init(onNewShelf: @escaping () -> Void, onCloseAll: @escaping () -> Void) {
+    init(onNewShelf: @escaping () -> Void, onCloseAll: @escaping () -> Void, onSettings: @escaping () -> Void) {
         self.onNewShelf = onNewShelf
         self.onCloseAll = onCloseAll
+        self.onSettings = onSettings
         super.init()
 
         statusItem.button?.image = NSImage(systemSymbolName: "tray.and.arrow.down", accessibilityDescription: "ShelfD")
@@ -19,6 +21,7 @@ final class MenuBarController: NSObject {
         menu.addItem(item("New Empty Shelf", #selector(newShelf), key: "n"))
         menu.addItem(item("Close All Shelves", #selector(closeAll), key: ""))
         menu.addItem(.separator())
+        menu.addItem(item("Settings…", #selector(openSettings), key: ","))
         menu.addItem(withTitle: "Quit ShelfD", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         statusItem.menu = menu
     }
@@ -31,4 +34,5 @@ final class MenuBarController: NSObject {
 
     @objc private func newShelf() { onNewShelf() }
     @objc private func closeAll() { onCloseAll() }
+    @objc private func openSettings() { onSettings() }
 }

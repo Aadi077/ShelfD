@@ -11,7 +11,17 @@ Shelves only keep references to your files. Nothing gets copied or moved until y
 - **See what's on it.** Click the stack to expand it into a list, then drag single files out.
 - **Empty it.** Drag the stack out to a folder, the Desktop, an app, and so on.
 - **Close it.** Click the × in the corner.
-- **Menu bar icon.** Use it to open an empty shelf, close every shelf, or quit.
+- **Menu bar icon.** Use it to open an empty shelf, close every shelf, open Settings (⌘,) or quit.
+
+Shelves are saved automatically and come back when ShelfD relaunches. If a file was moved in the meantime, the shelf still finds it.
+
+## Settings
+
+- **Open at login**
+- **Shake sensitivity.** Gentle, Normal or Firm.
+- **Excluded apps.** Shaking while dragging from these apps won't open a shelf.
+
+For "Open at login" to keep working, move `ShelfD.app` to `/Applications` first.
 
 ## Build
 

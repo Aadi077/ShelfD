@@ -11,6 +11,19 @@ struct ShelfItem: Equatable {
         reference = (url as NSURL).fileReferenceURL() ?? url
     }
 
+    /// Recreates an item from saved bookmark data, or nil if the file can't be found.
+    init?(bookmark: Data) {
+        var stale = false
+        guard let url = try? URL(resolvingBookmarkData: bookmark, options: [.withoutUI], bookmarkDataIsStale: &stale),
+              FileManager.default.fileExists(atPath: url.path) else { return nil }
+        self.init(url: url)
+    }
+
+    /// Bookmark data that can find the file again after a relaunch, even if it moved.
+    var bookmark: Data? {
+        try? url?.bookmarkData()
+    }
+
     /// The file's current path, or nil if it no longer exists.
     var url: URL? {
         let resolved = (reference as NSURL).filePathURL ?? originalURL

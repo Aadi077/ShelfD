@@ -78,3 +78,26 @@ private struct AxisTracker {
         return reversals.count >= config.requiredReversals
     }
 }
+
+/// User-facing shake sensitivity presets.
+public enum ShakeSensitivity: String, CaseIterable, Identifiable {
+    case gentle, normal, firm
+
+    public var id: String { rawValue }
+
+    public var title: String {
+        switch self {
+        case .gentle: return "Gentle"
+        case .normal: return "Normal"
+        case .firm: return "Firm"
+        }
+    }
+
+    public var config: ShakeDetector.Config {
+        switch self {
+        case .gentle: return .init(minSegment: 20, requiredReversals: 3, window: 0.8)
+        case .normal: return .init()
+        case .firm: return .init(minSegment: 45, requiredReversals: 5, window: 0.7)
+        }
+    }
+}

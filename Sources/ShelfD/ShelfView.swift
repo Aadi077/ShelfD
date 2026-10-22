@@ -10,6 +10,8 @@ final class ShelfView: NSView, NSDraggingSource {
     var onSizeChange: ((NSSize) -> Void)?
     /// Called when the user drops the last item out, or clicks close.
     var onClose: (() -> Void)?
+    /// Called whenever items are added or removed.
+    var onItemsChange: (() -> Void)?
 
     private var expanded = false
     private var dropHighlight = false
@@ -52,6 +54,12 @@ final class ShelfView: NSView, NSDraggingSource {
         itemsChanged()
     }
 
+    /// Replaces the contents with previously saved items.
+    func restore(_ saved: [ShelfItem]) {
+        items = saved
+        itemsChanged()
+    }
+
     private func remove(_ removed: [ShelfItem]) {
         items.removeAll { removed.contains($0) }
         itemsChanged()
@@ -68,6 +76,7 @@ final class ShelfView: NSView, NSDraggingSource {
         if items.count <= 1 { expanded = false }
         needsDisplay = true
         onSizeChange?(preferredSize)
+        onItemsChange?()
     }
 
     private var visibleRowCount: Int { min(items.count, maxRows) }

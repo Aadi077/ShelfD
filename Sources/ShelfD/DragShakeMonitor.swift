@@ -11,6 +11,13 @@ final class DragShakeMonitor {
     var onShake: ((NSPoint) -> Void)?
     /// Called whenever the left mouse button is released.
     var onMouseUp: (() -> Void)?
+    /// Asked once when a file drag starts; returning true ignores shakes for that drag.
+    var shouldIgnoreDrag: (() -> Bool)?
+
+    var config: ShakeDetector.Config {
+        get { detector.config }
+        set { detector.config = newValue }
+    }
 
     private let detector = ShakeDetector()
     private let dragPasteboard = NSPasteboard(name: .drag)
@@ -62,7 +69,7 @@ final class DragShakeMonitor {
             isFileDrag = dragPasteboard.canReadObject(
                 forClasses: [NSURL.self],
                 options: [.urlReadingFileURLsOnly: true]
-            )
+            ) && !(shouldIgnoreDrag?() ?? false)
             log.info("Drag started (file drag: \(self.isFileDrag))")
         }
         guard isFileDrag else { return }
