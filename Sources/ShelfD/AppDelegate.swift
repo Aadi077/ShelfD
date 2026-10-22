@@ -35,6 +35,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         monitor.start()
     }
 
+    /// Opening the app again (Finder, Launchpad, Spotlight) shows Settings, since there's no Dock icon or main window.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        settings.show()
+        return false
+    }
+
     private func openShelf(near point: NSPoint, pending: Bool) {
         let shelf = ShelfController()
         track(shelf)
